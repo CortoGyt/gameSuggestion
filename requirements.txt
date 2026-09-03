@@ -1,0 +1,32 @@
+# Backend
+fastapi==0.104.1
+uvicorn==0.24.0
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9
+python-dotenv==1.0.0
+
+# ML
+scikit-learn==1.3.2
+sentence-transformers==2.2.2
+numpy==1.24.3
+pandas==1.5.3
+
+# Vector DB - Chroma
+chromadb==0.4.10
+
+# LLM - HuggingFace
+transformers==4.35.0
+torch==2.1.1
+huggingface-hub==0.19.4
+accelerate==0.24.0
+
+# Monitoring
+mlflow==2.8.1
+
+# Frontend
+streamlit==1.28.1
+requests==2.31.0
+
+# Utils
+pydantic==2.5.0
+pydantic-settings==2.1.0

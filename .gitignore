@@ -1,0 +1,6 @@
+#venv
+.gsenv
+
+#Variables d'env
+.env
+
