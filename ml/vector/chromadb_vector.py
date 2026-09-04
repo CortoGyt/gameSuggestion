@@ -26,10 +26,15 @@ class ChromaStore:
         """Ajouter des jeux à Chroma
         games: [{"id": str, "name": str, "description": str, "metadata": dict}, ...]
         """
-        documents = [g["description"] for g in games]
-        metadatas = [g.get("metadata", {}) for g in games]
-        ids = [str(g["id"]) for g in games]
-        names = [g["name"] for g in games]
+        documents = []
+        metadatas = []
+        ids = []
+        names = []
+        for g in games:
+            documents.append(g["description"])
+            metadatas.append(g.get("metadata", {}))
+            ids.append(str(g["id"]))
+            names.append(g["name"])
 
         self.collection.add(
             documents=documents,
@@ -45,15 +50,16 @@ class ChromaStore:
             n_results=n_results
         )
 
-        return [
-            {
+        search_results = []
+        for i in range(len(results["ids"][0])):
+            result_item = {
                 "id": results["ids"][0][i],
                 "name": results["names"][0][i] if "names" in results else None,
                 "distance": results["distances"][0][i],
                 "metadata": results["metadatas"][0][i]
             }
-            for i in range(len(results["ids"][0]))
-        ]
+            search_results.append(result_item)
+        return search_results
 
     def persist(self):
         """Sauvegarder Chroma"""

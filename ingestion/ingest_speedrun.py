@@ -82,10 +82,9 @@ def ingest_speedrun_games():
                     cat_response = requests.get(categories_url, timeout=10)
                     cat_response.raise_for_status()
                     cat_data = cat_response.json()
-                    categories = [
-                        cat.get("name", "Inconnu")
-                        for cat in cat_data.get("data", [])
-                    ]
+                    categories = []
+                    for cat in cat_data.get("data", []):
+                        categories.append(cat.get("name", "Inconnu"))
                     print(f"{len(categories)} catégories récupérées pour {game_name}")
                 except Exception as e:
                     print(f"Erreur lors de la récupération des catégories pour {game_id}: {e}")
