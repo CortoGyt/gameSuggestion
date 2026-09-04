@@ -22,7 +22,7 @@ def ingest_speedrun_games():
     game_count = 0
     offset = 0
     max_per_page = 200
-    target_count = 1000
+    target_count = 500
 
     print(f"Démarrage de l'ingestion depuis {base_url}...")
 
