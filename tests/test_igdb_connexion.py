@@ -10,6 +10,7 @@ en régénérer un (POST https://id.twitch.tv/oauth2/token) et mettre à jour
 la variable d'environnement.
 """
 import os
+
 import requests
 from dotenv import load_dotenv
 
