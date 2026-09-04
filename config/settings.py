@@ -5,8 +5,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     # Database
-    DATABASE_URL: str = "postgresql://user:password@localhost:5432/game_suggestion"
-
+    DATABASE_URL: str
     # APIs
     IGDB_CLIENT_ID: str
     IGDB_ACCESS_TOKEN: str
