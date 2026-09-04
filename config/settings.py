@@ -10,11 +10,10 @@ class Settings(BaseSettings):
     IGDB_CLIENT_ID: str
     IGDB_ACCESS_TOKEN: str
     STEAM_API_KEY: str
-    RAWG_API_KEY: str
 
     # LLM - HuggingFace
     HF_MODEL_ID: str = "meta-llama/Llama-2-7b-chat-hf"  # ou autre
-    HF_TOKEN: str  # Token HuggingFace si modèle gated
+    HF_TOKEN: str | None = None  # Token HuggingFace si modèle gated
 
     # SVD
     SVD_MODEL_PATH: str = "ml/svd/models/svd_model.pkl"
@@ -36,6 +35,8 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = ".env"
+        extra="ignore"
+
 
 # Caching des parametres
 @lru_cache

@@ -4,3 +4,4 @@
 #Variables d'env
 .env
 
+__pycache__
