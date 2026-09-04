@@ -52,32 +52,51 @@ def classify_error(exception):
 
 def fetch_available_models():
     """
-    Découvre les modèles trending text-generation Instruct via l'API Hugging Face Hub.
-    Retourne une liste de noms de modèles ou None en cas d'erreur.
+    Découvre les modèles text-generation depuis 6 auteurs différents via l'API Hugging Face Hub.
+    Retourne une liste de noms de modèles uniques (jusqu'à 12 modèles) ou None si aucun modèle trouvé.
     """
     url = "https://huggingface.co/api/models"
-    params = {
-        "inference_provider": "all",
-        "pipeline_tag": "text-generation",
-        "search": "Instruct",
-        "sort": "trendingScore",
-        "limit": 15
-    }
 
-    try:
-        response = requests.get(url, params=params, timeout=10)
-        response.raise_for_status()
-        models_data = response.json()
+    # Liste des auteurs pour la diversité
+    authors = ["meta-llama", "Qwen", "mistralai", "google", "deepseek-ai", "microsoft"]
 
-        # Extrait les noms de modèles
-        model_names = []
-        for m in models_data:
-            if isinstance(m, dict) and "id" in m:
-                model_names.append(m["id"])
-        return model_names
+    all_models = []
+    model_ids_seen = set()
 
-    except requests.exceptions.RequestException:
+    # Boucle sur chaque auteur
+    for author in authors:
+        params = {
+            "inference_provider": "all",
+            "pipeline_tag": "text-generation",
+            "author": author,
+            "sort": "trendingScore",
+            "limit": 2
+        }
+
+        try:
+            response = requests.get(url, params=params, timeout=10)
+            response.raise_for_status()
+            models_data = response.json()
+
+            # Extrait les noms de modèles
+            for m in models_data:
+                if isinstance(m, dict) and "id" in m:
+                    model_id = m["id"]
+                    # Ajoute seulement si ce n'est pas un doublon
+                    if model_id not in model_ids_seen:
+                        all_models.append(model_id)
+                        model_ids_seen.add(model_id)
+
+        except requests.exceptions.RequestException as e:
+            # Log l'erreur et continue avec l'auteur suivant
+            print(f"Avertissement: impossible de récupérer les modèles de {author}: {e}")
+            continue
+
+    # Retourne None si aucun modèle n'a pu être récupéré
+    if len(all_models) == 0:
         return None
+
+    return all_models
 
 
 def check_models():
