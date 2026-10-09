@@ -6,21 +6,22 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     # Database
     DATABASE_URL: str
-    # APIs
-    IGDB_CLIENT_ID: str
-    IGDB_ACCESS_TOKEN: str
-    STEAM_API_KEY: str
+    # APIs (optionnelles : chaque script vérifie celles dont il a besoin)
+    IGDB_CLIENT_ID: str | None = None
+    IGDB_CLIENT_SECRET: str | None = None  # utilisé par ingest_igdb.py pour obtenir le token
+    IGDB_ACCESS_TOKEN: str | None = None  # utilisé seulement par tests/test_igdb_connexion.py
+    STEAM_API_KEY: str | None = None
 
-    # LLM  HuggingFace 
+    # LLM  HuggingFace
     #PAS RETENU, DEMANDE DES SOUS !!
     # HF_LABELLING_MODEL_ID: str = "Qwen/Qwen3-4B-Instruct-2507" #labellise le jeux à l'initial après récup via api speedrun.com
     # HF_MODEL_ID: str = "meta-llama/Llama-2-7b-chat-hf"  # placeholder, à check plus tard
     # HF_TOKEN: str | None = None  # Token HuggingFace si modèle gated
 
     #Groq
-    GROQ_API_KEY: str
+    GROQ_API_KEY: str | None = None
     GROQ_LABELLING_MODEL_ID: str = "llama-3.1-8b-instant"
-    
+
     # SVD
     SVD_MODEL_PATH: str = "ml/svd/models/svd_model.pkl"
     SVD_DIMENSIONS: int = 50

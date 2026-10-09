@@ -1,0 +1,26 @@
+{
+  "_comment": "Remplis difficulty, execution, randomness et glitchness avec TON avis de speedrunner. Les jeux laissés vides sont ignorés. Les clés qui commencent par _ sont ignorées.",
+  "_difficulty_et_execution": ["facile", "intermediaire", "avance", "difficile", "extreme"],
+  "_randomness_et_glitchness": ["aucun", "bas", "moyen", "haut", "extreme"],
+
+  "Celeste": {"difficulty": "difficile", "execution": "avance","randomness": "aucun", "glitchness": "bas"},
+  "Super Mario 64": {"difficulty": "avance", "execution": "difficile", "randomness": "bas", "glitchness": "haut"},
+  "Hollow Knight": {"difficulty": "avance", "execution": "avance", "randomness": "bas", "glitchness": "moyen"},
+  "Counter-Strike": {"difficulty": "intermediaire", "execution": "intermediaire", "randomness": "moyen", "glitchness": "bas"},
+  "Factorio": {"difficulty": "difficile", "execution": "avance", "randomness": "moyen", "glitchness": "bas"},
+  "Tetris": {"difficulty": "avance", "execution": "extreme", "randomness": "haut", "glitchness": "aucun"},
+  "Spelunky": {"difficulty": "difficile", "execution": "avance", "randomness": "extreme", "glitchness": "moyen"},
+  "Dark Souls": {"difficulty": "avance", "execution": "avance", "randomness": "bas", "glitchness": "haut"},
+  "Getting Over It with Bennett Foddy": {"difficulty": "difficile", "execution": "extreme", "randomness": "aucun", "glitchness": "moyen"},
+  "Pokémon Red": {"difficulty": "avance", "execution": "difficile", "randomness": "haut", "glitchness": "extreme"},
+  "Super Mario Bros.": {"difficulty": "difficile", "execution": "extreme", "randomness": "bas", "glitchness": "moyen"},
+  "Super Metroid": {"difficulty": "difficile", "execution": "difficile", "randomness": "bas", "glitchness": "moyen"},
+  "The Legend of Zelda: Ocarina of Time": {"difficulty": "difficile", "execution": "difficile", "randomness": "bas", "glitchness": "extreme"},
+  "Hades": {"difficulty": "avance", "execution": "avance", "randomness": "haut", "glitchness": "bas"},
+  "Minecraft": {"difficulty": "avance", "execution": "avance", "randomness": "extreme", "glitchness": "bas"},
+  "Portal": {"difficulty": "difficile", "execution": "extreme", "randomness": "aucun", "glitchness": "extreme"},
+  "Doom": {"difficulty": "avance", "execution": "difficile", "randomness": "moyen", "glitchness": "moyen"},
+  "Stardew Valley": {"difficulty": "intermediaire", "execution": "intermediaire", "randomness": "moyen", "glitchness": "bas"},
+  "Mega Man 2": {"difficulty": "intermediaire", "execution": "avance", "randomness": "bas", "glitchness": "moyen"},
+  "Elden Ring": {"difficulty": "avance", "execution": "avance", "randomness": "bas", "glitchness": "extreme"}
+}

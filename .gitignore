@@ -1,5 +1,6 @@
 #venv
-.gsenv
+.venv/
+.gsvenv/
 
 #Variables d'env
 .env
@@ -7,4 +8,9 @@
 __pycache__
 
 #données
-/data
+/data/*
+!/data/games_seed.txt
+!/data/labels_reference.json
+mlflow.db
+mlartifacts/
+mlruns/
