@@ -75,7 +75,7 @@ CREATE TABLE Style_Games (
 CREATE TABLE Textes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     game_id INT NOT NULL,
-    source ENUM('steam_blurb', 'steam_reviews') NOT NULL,
+    source ENUM('steam_blurb', 'steam_reviews', 'igdb_summary') NOT NULL,
     content TEXT NOT NULL,
     FOREIGN KEY (game_id) REFERENCES Games(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
