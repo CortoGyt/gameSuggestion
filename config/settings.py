@@ -1,24 +1,21 @@
 from functools import lru_cache
 
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
     # Database
     DATABASE_URL: str
+
     # APIs (optionnelles : chaque script vérifie celles dont il a besoin)
     IGDB_CLIENT_ID: str | None = None
     IGDB_CLIENT_SECRET: str | None = None  # utilisé par ingest_igdb.py pour obtenir le token
     IGDB_ACCESS_TOKEN: str | None = None  # utilisé seulement par tests/test_igdb_connexion.py
     STEAM_API_KEY: str | None = None
 
-    # LLM  HuggingFace
-    #PAS RETENU, DEMANDE DES SOUS !!
-    # HF_LABELLING_MODEL_ID: str = "Qwen/Qwen3-4B-Instruct-2507" #labellise le jeux à l'initial après récup via api speedrun.com
-    # HF_MODEL_ID: str = "meta-llama/Llama-2-7b-chat-hf"  # placeholder, à check plus tard
-    # HF_TOKEN: str | None = None  # Token HuggingFace si modèle gated
-
-    #Groq
+    # Groq (labelling de secours)
     GROQ_API_KEY: str | None = None
     GROQ_LABELLING_MODEL_ID: str = "llama-3.1-8b-instant"
 
@@ -39,10 +36,6 @@ class Settings(BaseSettings):
     # API
     API_HOST: str = "0.0.0.0"
     API_PORT: int = 8000
-
-    class Config:
-        env_file = ".env"
-        extra="ignore"
 
 
 # Caching des parametres
