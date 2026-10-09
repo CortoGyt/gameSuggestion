@@ -36,6 +36,7 @@ class Settings(BaseSettings):
     # API
     API_HOST: str = "0.0.0.0"
     API_PORT: int = 8000
+    CORS_ORIGINS: str = "http://localhost:8501"  # séparées par des virgules
 
 
 # Caching des parametres
