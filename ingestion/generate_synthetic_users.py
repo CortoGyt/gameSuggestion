@@ -19,7 +19,7 @@ from sqlalchemy import create_engine, text
 from config.settings import get_settings
 
 SEED = 42
-NB_NOTES_PAR_UTILISATEUR = 40
+NB_NOTES_PAR_UTILISATEUR = 100
 BRUIT_MAX = 0.7  # le bruit décale la note de -0,7 à +0,7 point (avant arrondi)
 MOT_DE_PASSE_INVALIDE = "!synthetic"
 
