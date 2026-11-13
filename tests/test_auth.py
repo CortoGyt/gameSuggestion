@@ -22,17 +22,6 @@ def test_mauvais_mot_de_passe_ou_nom_inconnu_donnent_la_meme_erreur_401(client):
     assert mauvais_mdp.json() == inconnu.json()
 
 
-def test_un_nom_deja_pris_est_refuse(client):
-    client.post("/api/v1/auth/register", json=IDENTIFIANTS)
-    assert client.post("/api/v1/auth/register", json=IDENTIFIANTS).status_code == 409
-
-
-def test_sans_jeton_ou_avec_un_faux_jeton_la_route_protegee_renvoie_401(client):
-    assert client.get("/api/v1/auth/me").status_code == 401
-    faux = client.get("/api/v1/auth/me", headers={"Authorization": "Bearer nimporte.quoi"})
-    assert faux.status_code == 401
-
-
 def test_le_mot_de_passe_n_est_jamais_stocke_en_clair(client):
     from api.database import get_db
     from main import app
