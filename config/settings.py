@@ -27,9 +27,6 @@ class Settings(BaseSettings):
     CHROMA_DB_PATH: str = "ml/vectorstore/chroma_db"
     CHROMA_COLLECTION: str = "games"
 
-    # Embedding Model
-    EMBEDDING_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
-
     # MLflow
     MLFLOW_TRACKING_URI: str = "http://localhost:5000"
 
