@@ -20,7 +20,7 @@ from ml.svd.model import SvdModel
 SEED = 42
 PART_TEST = 0.2
 FACTEURS_A_ESSAYER = [2, 3, 5, 8]
-CHEMIN_MODELE = "ml/svd/modele_svd.pkl"
+CHEMIN_MODELE = get_settings().SVD_MODEL_PATH
 
 
 def charger_notes(conn):

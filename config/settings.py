@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     GROQ_LABELLING_MODEL_ID: str = "llama-3.1-8b-instant"
 
     # SVD
-    SVD_MODEL_PATH: str = "ml/svd/models/svd_model.pkl"
+    SVD_MODEL_PATH: str = "ml/svd/modele_svd.pkl"
     SVD_DIMENSIONS: int = 50
 
     # Vector DB Chroma
