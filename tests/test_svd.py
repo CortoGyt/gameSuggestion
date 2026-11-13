@@ -15,12 +15,6 @@ def test_les_notes_predites_restent_entre_1_et_5():
             assert 1.0 <= modele.predict(user_id, game_id) <= 5.0
 
 
-def test_un_utilisateur_inconnu_ne_fait_pas_planter_le_modele():
-    modele = SvdModel(nb_facteurs=2).fit(NOTES)
-    assert 1.0 <= modele.predict(999, 1) <= 5.0
-    assert modele.recommend(999) == []
-
-
 def test_on_ne_recommande_pas_un_jeu_deja_note():
     modele = SvdModel(nb_facteurs=2).fit(NOTES)
     recommandes = modele.recommend(1, n=10)

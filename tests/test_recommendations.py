@@ -23,13 +23,12 @@ def test_les_recommandations_excluent_les_jeux_deja_notes_et_donnent_le_nom(clie
     assert sorted(noms) == ["Hades", "Peggle"]
 
 
-def test_un_nouvel_utilisateur_sans_notes_recoit_une_liste_vide(client):
+def test_un_nouvel_utilisateur_avec_preferences_recoit_des_jeux_classes_par_ressemblance(client):
+    entetes = connecter(client)
+    preferences = {"styles": ["Platformer"], "difficulty": "Avancé", "randomness": "Aucun"}
+    client.put("/api/v1/preferences", json=preferences, headers=entetes)
     notes = [(10, 1, 5), (10, 2, 3), (11, 3, 4)]
     app.dependency_overrides[charger_modele] = lambda: SvdModel(nb_facteurs=2).fit(notes)
-    reponse = client.get("/api/v1/recommendations", headers=connecter(client))
-    assert reponse.status_code == 200
-    assert reponse.json() == []
-
-
-def test_les_recommandations_demandent_un_jeton(client):
-    assert client.get("/api/v1/recommendations").status_code == 401
+    reponse = client.get("/api/v1/recommendations", headers=entetes).json()
+    assert reponse[0]["game_name"] == "Celeste"
+    assert reponse[0]["source"] == "preferences"

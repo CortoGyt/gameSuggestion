@@ -23,6 +23,9 @@ TABLES = [
     "CREATE TABLE Styles (id INTEGER PRIMARY KEY, style_name TEXT)",
     "CREATE TABLE Style_Games (game_id INT, style_id INT)",
     "CREATE TABLE Roles (id INTEGER PRIMARY KEY, name TEXT)",
+    "CREATE TABLE Preferences (user_id INTEGER PRIMARY KEY, duration_pref TEXT, dimension_pref TEXT,"
+    " difficulty_id INT, execution_id INT, randomness_id INT, glitchness_id INT)",
+    "CREATE TABLE Preferences_Styles (user_id INT, style_id INT)",
     "CREATE TABLE Users (id INTEGER PRIMARY KEY, user_name TEXT UNIQUE, user_pw_hash TEXT, role_id INT)",
 ]
 
