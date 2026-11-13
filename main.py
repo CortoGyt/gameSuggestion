@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routes import games, health
+from api.routes import auth, games, health
 from config.settings import get_settings
 
 settings = get_settings()
@@ -30,6 +30,7 @@ app.add_middleware(
 
 app.include_router(health.router, prefix="/api/v1", tags=["health"])
 app.include_router(games.router, prefix="/api/v1", tags=["jeux"])
+app.include_router(auth.router, prefix="/api/v1", tags=["authentification"])
 
 if __name__ == "__main__":
     uvicorn.run(app, host=settings.API_HOST, port=settings.API_PORT)

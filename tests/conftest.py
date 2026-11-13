@@ -2,6 +2,7 @@ import os
 
 # Doit être défini avant l'import de main (qui lit les settings)
 os.environ.setdefault("DATABASE_URL", "sqlite://")
+os.environ.setdefault("JWT_SECRET_KEY", "cle-de-test-seulement-0123456789abcdef")
 
 import pytest
 from fastapi.testclient import TestClient
@@ -21,6 +22,8 @@ TABLES = [
     " glitchness_id INT)",
     "CREATE TABLE Styles (id INTEGER PRIMARY KEY, style_name TEXT)",
     "CREATE TABLE Style_Games (game_id INT, style_id INT)",
+    "CREATE TABLE Roles (id INTEGER PRIMARY KEY, name TEXT)",
+    "CREATE TABLE Users (id INTEGER PRIMARY KEY, user_name TEXT UNIQUE, user_pw_hash TEXT, role_id INT)",
 ]
 
 # Trois jeux : Celeste, Peggle, Hades
@@ -31,6 +34,7 @@ DONNEES = [
     " (2, 'Peggle', 60, '2D', 1, 1, 1, 1), (3, 'Hades', 90, '3D', 3, 3, 2, 1)",
     "INSERT INTO Styles VALUES (1, 'Platformer'), (2, 'Puzzle'), (3, 'Roguelike')",
     "INSERT INTO Style_Games VALUES (1, 1), (2, 2), (3, 3), (3, 1)",
+    "INSERT INTO Roles VALUES (1, 'user'), (2, 'admin')",
 ]
 
 
