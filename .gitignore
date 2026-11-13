@@ -17,3 +17,6 @@ mlruns/
 
 ml/vectorstore/
 ml/svd/modele_svd.pkl
+
+htmlcov/
+.coverage
