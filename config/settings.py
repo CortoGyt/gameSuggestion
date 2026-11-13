@@ -30,6 +30,10 @@ class Settings(BaseSettings):
     # MLflow
     MLFLOW_TRACKING_URI: str = "http://localhost:5000"
 
+    # Authentification (JWT)
+    JWT_SECRET_KEY: str
+    JWT_EXPIRE_MINUTES: int = 60
+
     # API
     API_HOST: str = "0.0.0.0"
     API_PORT: int = 8000
