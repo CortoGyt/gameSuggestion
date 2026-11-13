@@ -18,6 +18,8 @@ class Settings(BaseSettings):
     # Groq (labelling de secours)
     GROQ_API_KEY: str | None = None
     GROQ_LABELLING_MODEL_ID: str = "llama-3.1-8b-instant"
+    OLLAMA_URL: str = "http://localhost:11434"
+    OLLAMA_EXPLANATION_MODEL_ID: str = "gemma3:12b"
 
     # SVD
     SVD_MODEL_PATH: str = "ml/svd/modele_svd.pkl"

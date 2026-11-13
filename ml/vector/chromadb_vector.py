@@ -67,11 +67,19 @@ class ChromaStore:
             self.collection.upsert(ids=ids, documents=documents, metadatas=metadatas)
         return len(ids)
 
-    def search(self, query, n_results=10, source=None):
+    def search(self, query, n_results=10, source=None, game_id=None):
         # Renvoie les morceaux les plus proches, du plus proche au plus éloigné
+        # source et game_id sont des filtres facultatifs (les deux ensemble : les deux doivent correspondre)
         options = {"query_texts": [query], "n_results": n_results}
+        conditions = []
         if source:
-            options["where"] = {"source": source}
+            conditions.append({"source": source})
+        if game_id is not None:
+            conditions.append({"game_id": game_id})
+        if len(conditions) == 1:
+            options["where"] = conditions[0]
+        if len(conditions) == 2:
+            options["where"] = {"$and": conditions}
         raw = self.collection.query(**options)
         results = []
         for i in range(len(raw["ids"][0])):
