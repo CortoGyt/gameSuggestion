@@ -12,7 +12,8 @@ from sqlalchemy.pool import StaticPool
 from api.database import get_db
 from main import app
 
-SCHEMA = [
+# Mini base de test : seulement les tables et colonnes que l'API lit
+TABLES = [
     "CREATE TABLE EchellesDE (id INTEGER PRIMARY KEY, label TEXT)",
     "CREATE TABLE EchellesRG (id INTEGER PRIMARY KEY, label TEXT)",
     "CREATE TABLE Games (id INTEGER PRIMARY KEY, game_name TEXT, game_length INT,"
@@ -22,7 +23,8 @@ SCHEMA = [
     "CREATE TABLE Style_Games (game_id INT, style_id INT)",
 ]
 
-DATA = [
+# Trois jeux : Celeste, Peggle, Hades
+DONNEES = [
     "INSERT INTO EchellesDE VALUES (1, 'Facile'), (3, 'Avancé')",
     "INSERT INTO EchellesRG VALUES (1, 'Aucun'), (2, 'Bas')",
     "INSERT INTO Games VALUES (1, 'Celeste', 25, '2D', 3, 3, 1, 2),"
@@ -34,22 +36,21 @@ DATA = [
 
 @pytest.fixture
 def client():
-    # Base sqlite en mémoire, recréée pour chaque test : aucun MySQL requis
+    # Base sqlite en mémoire, recréée pour chaque test : pas besoin de MySQL
     engine = create_engine(
         "sqlite://",
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
     with engine.begin() as connection:
-        for statement in SCHEMA:
-            connection.execute(text(statement))
-        for statement in DATA:
-            connection.execute(text(statement))
+        for requete in TABLES + DONNEES:
+            connection.execute(text(requete))
 
-    def override_get_db():
+    def fausse_base():
         with Session(engine) as db:
             yield db
 
-    app.dependency_overrides[get_db] = override_get_db
+    # L'API utilise la fausse base au lieu de MySQL
+    app.dependency_overrides[get_db] = fausse_base
     yield TestClient(app)
     app.dependency_overrides.clear()
