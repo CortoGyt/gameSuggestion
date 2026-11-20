@@ -1,72 +1,33 @@
-"""Label every game (difficulty, execution, randomness, glitchness) with a LOCAL model served by Ollama.
+"""Outils partagés pour étiqueter les jeux (difficulté, exécution, hasard, glitchs) avec un modèle LOCAL (Ollama).
 
-No training here: a pre-trained model is run on the GPU (inference) and its answers go to MySQL.
-The answer format is enforced by Ollama with a JSON schema (enum of the allowed words), so the
-model cannot output a word outside its scale or put a SCALE B word in "difficulty".
+Ce fichier ne lance rien tout seul. Il fournit :
+- build_prompt : le texte envoyé au modèle (en anglais : c'est ainsi qu'il a été mesuré) ;
+- check_ollama : vérifie qu'Ollama répond et que le modèle est installé ;
+- load_categories : les catégories de speedrun de chaque jeu ;
+- get_pending_games : les jeux à étiqueter, avec leurs infos (genres, dimension, durée du record) ;
+- save_labels : écrit les 4 niveaux (bas / moyen / haut) dans la table Games.
 
-For each game that is not fully labelled yet, the prompt gets the game name, the speedrun categories
-(from data/speedrun_raw.json when the game is in it, otherwise "Any%"), and, when the database has them,
-the genres, the dimension and the world-record time. Then the four labels are stored as foreign keys
-(Games.difficulty_id / execution_id -> EchellesDE, randomness_id / glitchness_id -> EchellesRG).
-
-Usage (from the project root, Ollama running, model pulled with `ollama pull qwen2.5:14b`):
-    python -m ingestion.label_games_local --limit 10 --dry-run   # look at the answers, write nothing
-    python -m ingestion.label_games_local --dry-run --game Celeste --game "Hollow Knight"   # chosen games only
-    python -m ingestion.label_games_local --dry-run --reasoning --game Tetris   # the model explains first
-    python -m ingestion.label_games_local --limit 10             # write 10 games
-    python -m ingestion.label_games_local                        # every game not labelled yet (resumable)
-    python -m ingestion.label_games_local --redo                 # relabel everything (new model, new prompt)
-    python -m ingestion.label_games_local --model mistral-small:24b
-
-Every answer is also saved in data/labels_output.json so you can check them against what you know.
-Env var (optional): OLLAMA_URL (default http://localhost:11434). Database: get_settings().DATABASE_URL.
+L'étiquetage lui-même (scores de 1 à 10, puis découpage par rang) est dans label_games_scores.py.
+Variable d'environnement (facultative) : OLLAMA_URL (par défaut http://localhost:11434).
 """
-import argparse
 import json
 import os
-import time
 
 import requests
-from config.settings import get_settings
-from sqlalchemy import create_engine, text
+from sqlalchemy import text
 
 from ingestion.ingest_igdb import normalize
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
-DEFAULT_MODEL = "qwen2.5:14b"
 RAW_PATH = "data/speedrun_raw.json"
-OUTPUT_PATH = "data/labels_output.json"
 DEFAULT_CATEGORY = "Any%"
 
-SCALE_A = ["facile", "intermediaire", "avance", "difficile", "extreme"]
-SCALE_B = ["aucun", "bas", "moyen", "haut", "extreme"]
-
-# Ollama "structured output": the model can only produce this exact JSON shape and these words.
-SCHEMA = {
-    "type": "object",
-    "properties": {
-        "difficulty": {"type": "string", "enum": SCALE_A},
-        "execution": {"type": "string", "enum": SCALE_A},
-        "randomness": {"type": "string", "enum": SCALE_B},
-        "glitchness": {"type": "string", "enum": SCALE_B},
-    },
-    "required": ["difficulty", "execution", "randomness", "glitchness"],
-}
-
-
-def make_schema(with_reasoning: bool) -> dict:
-    """The schema above, with a free-text "reasoning" written BEFORE the four labels if asked."""
-    if not with_reasoning:
-        return SCHEMA
-    properties = {"reasoning": {"type": "string"}}
-    for key, value in SCHEMA["properties"].items():
-        properties[key] = value
-    required = ["reasoning"] + SCHEMA["required"]
-    return {"type": "object", "properties": properties, "required": required}
+# Les trois niveaux, du plus bas au plus haut (les mêmes pour les quatre critères)
+LEVELS = ["bas", "moyen", "haut"]
 
 
 def load_categories() -> dict:
-    """normalized game name -> speedrun categories, from the speedrun.com ingestion file (if any)."""
+    """Nom de jeu normalisé -> catégories de speedrun, lues dans le fichier d'ingestion speedrun.com (s'il existe)."""
     categories = {}
     if not os.path.exists(RAW_PATH):
         return categories
@@ -79,7 +40,7 @@ def load_categories() -> dict:
     return categories
 
 
-def build_prompt(name: str, categories: list, genres, dimension, length_minutes, with_reasoning: bool = False) -> str:
+def build_prompt(name: str, categories: list, genres, dimension, length_minutes, with_reasoning: bool = False, description=None) -> str:
     categories_text = ", ".join(categories)
 
     keys_text = "exactly these 4 keys"
@@ -99,6 +60,8 @@ def build_prompt(name: str, categories: list, genres, dimension, length_minutes,
         context += f"Dimension: {dimension}\n"
     if length_minutes:
         context += f"World record time of the main category: about {length_minutes} minutes\n"
+    if description:
+        context += f"Description: {description}\n"
     if context:
         context = "Known facts about the game:\n" + context + "\n"
 
@@ -111,11 +74,11 @@ What each key measures, for a SPEEDRUN of the game, and what each level means:
 
 {reasoning_text}
 "difficulty": how hard it is overall to learn and complete a good run (knowledge, practice time, consistency, resets, luck)
-  facile = short and forgiving run, almost nothing to learn, a mistake costs almost nothing (examples: Peggle, Untitled Goose Game, Firewatch)
+  facile = short and forgiving run, almost nothing to learn, a mistake costs almost nothing (example: Peggle)
   intermediaire = needs the route and some practice, resets are rare
   avance = a lot of practice or a long route to master
   difficile = hundreds of hours, frequent resets, a very demanding run
-  extreme = the hardest runs that exist, because of the skill or because of luck that forces a huge number of attempts (examples: Yu-Gi-Oh! Forbidden Memories, N++, Super Meat Boy, Ghosts 'n Goblins)
+  extreme = the hardest runs that exist, because of the skill or because of luck that forces a huge number of attempts (example: Yu-Gi-Oh! Forbidden Memories)
 
 "execution": how demanding the mechanical skill of the world-record route is (precise inputs, tricks, timing). This is NOT how hard the game is for a normal player.
   facile = simple inputs, no tight timing
@@ -168,50 +131,8 @@ def check_ollama(model: str) -> bool:
     return False
 
 
-def ask_model(model: str, prompt: str, schema: dict = SCHEMA) -> dict:
-    resp = requests.post(
-        f"{OLLAMA_URL}/api/chat",
-        json={
-            "model": model,
-            "messages": [{"role": "user", "content": prompt}],
-            "stream": False,
-            "format": schema,
-            "options": {"temperature": 0},
-        },
-        timeout=600,  # the first call also loads the model into VRAM
-    )
-    resp.raise_for_status()
-    return json.loads(resp.json()["message"]["content"])
-
-
-def validate(result: dict) -> dict | None:
-    """The labels as clean lowercase words if everything is valid, otherwise None."""
-    clean = {}
-    for key in ("difficulty", "execution", "randomness", "glitchness"):
-        value = result.get(key)
-        if not isinstance(value, str):
-            return None
-        clean[key] = normalize(value)
-    for key in ("difficulty", "execution"):
-        if clean[key] not in SCALE_A:
-            return None
-    for key in ("randomness", "glitchness"):
-        if clean[key] not in SCALE_B:
-            return None
-    return clean
-
-
-def get_scale_ids(engine, table: str) -> dict:
-    """normalized label ('intermediaire') -> id, whatever the casing / accents stored in the table."""
-    ids = {}
-    with engine.connect() as conn:
-        for row in conn.execute(text(f"SELECT id, label FROM {table}")).fetchall():
-            ids[normalize(row[1])] = row[0]
-    return ids
-
-
 def get_pending_games(engine, limit: int | None, redo: bool, names: list | None = None) -> list:
-    """Games to label. If names is given: exactly these games, labelled or not."""
+    """Jeux à étiqueter. Si names est donné : exactement ces jeux, déjà étiquetés ou non."""
     where = ""
     params = {}
     if names:
@@ -223,8 +144,8 @@ def get_pending_games(engine, limit: int | None, redo: bool, names: list | None 
         where = "WHERE g.game_name IN (" + ", ".join(placeholders) + ")"
     elif not redo:
         where = (
-            "WHERE g.difficulty_id IS NULL OR g.execution_id IS NULL "
-            "OR g.randomness_id IS NULL OR g.glitchness_id IS NULL"
+            "WHERE g.difficulty IS NULL OR g.execution IS NULL "
+            "OR g.randomness IS NULL OR g.glitchness IS NULL"
         )
     sql = (
         "SELECT g.id, g.game_name, g.game_dimension, g.game_length, "
@@ -241,109 +162,19 @@ def get_pending_games(engine, limit: int | None, redo: bool, names: list | None 
         return list(conn.execute(text(sql), params).fetchall())
 
 
-def save_labels(engine, game_id: int, labels: dict, ids_de: dict, ids_rg: dict) -> None:
+def save_labels(engine, game_id: int, labels: dict) -> None:
+    """Écrit les 4 niveaux (les mots bas / moyen / haut) d'un jeu dans la table Games."""
     with engine.begin() as conn:
         conn.execute(
             text(
-                "UPDATE Games SET difficulty_id = :d, execution_id = :e, "
-                "randomness_id = :r, glitchness_id = :g WHERE id = :id"
+                "UPDATE Games SET difficulty = :d, execution = :e, "
+                "randomness = :r, glitchness = :g WHERE id = :id"
             ),
             {
-                "d": ids_de[labels["difficulty"]],
-                "e": ids_de[labels["execution"]],
-                "r": ids_rg[labels["randomness"]],
-                "g": ids_rg[labels["glitchness"]],
+                "d": labels["difficulty"],
+                "e": labels["execution"],
+                "r": labels["randomness"],
+                "g": labels["glitchness"],
                 "id": game_id,
             },
         )
-
-
-def write_output(output: list) -> None:
-    os.makedirs("data", exist_ok=True)
-    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--limit", type=int, default=None, help="max games to process")
-    parser.add_argument("--model", default=DEFAULT_MODEL, help=f"Ollama model (default {DEFAULT_MODEL})")
-    parser.add_argument("--dry-run", action="store_true", help="show the answers, write nothing in the database")
-    parser.add_argument("--redo", action="store_true", help="also relabel the games that already have labels")
-    parser.add_argument(
-        "--reasoning",
-        action="store_true",
-        help="the model first writes 2-3 sentences about the game's speedruns, then the labels (slower, often better)",
-    )
-    parser.add_argument(
-        "--game",
-        action="append",
-        default=None,
-        help="label only this game (exact name); repeat the option for several games",
-    )
-    args = parser.parse_args()
-
-    if not check_ollama(args.model):
-        return
-
-    engine = create_engine(get_settings().DATABASE_URL)
-    try:
-        ids_de = get_scale_ids(engine, "EchellesDE")
-        ids_rg = get_scale_ids(engine, "EchellesRG")
-        missing = []
-        for word in SCALE_A:
-            if word not in ids_de:
-                missing.append(f"EchellesDE:{word}")
-        for word in SCALE_B:
-            if word not in ids_rg:
-                missing.append(f"EchellesRG:{word}")
-        if missing:
-            print("Valeurs absentes des tables d'échelles :", ", ".join(missing))
-            return
-
-        categories = load_categories()
-        pending = get_pending_games(engine, args.limit, args.redo, args.game)
-        print(f"{len(pending)} jeux à labelliser avec {args.model}" + (" (dry-run)" if args.dry_run else ""))
-
-        output = []
-        failed = 0
-        started = time.time()
-        try:
-            for i, row in enumerate(pending, 1):
-                game_id, name, dimension, length, genres = row
-                name = name.strip()
-                game_categories = categories.get(normalize(name), [DEFAULT_CATEGORY])
-                prompt = build_prompt(name, game_categories, genres, dimension, length, args.reasoning)
-                reasoning = None
-                try:
-                    answer = ask_model(args.model, prompt, make_schema(args.reasoning))
-                    reasoning = answer.get("reasoning")
-                    labels = validate(answer)
-                    if labels is None:
-                        raise ValueError("réponse invalide")
-                    if not args.dry_run:
-                        save_labels(engine, game_id, labels, ids_de, ids_rg)
-                except Exception as exc:  # model/DB error: skip, retried on the next run
-                    failed += 1
-                    print(f"[{i}/{len(pending)}] ERREUR {name}: {exc}")
-                    continue
-                entry = {"game_id": game_id, "game_name": name, "model": args.model, **labels}
-                if reasoning:
-                    entry["reasoning"] = reasoning
-                output.append(entry)
-                print(
-                    f"[{i}/{len(pending)}] {name}: diff={labels['difficulty']} exec={labels['execution']} "
-                    f"rng={labels['randomness']} glitch={labels['glitchness']}"
-                )
-                if reasoning:
-                    print(f"      {reasoning}")
-        finally:
-            write_output(output)
-        minutes = round((time.time() - started) / 60, 1)
-        print(f"Terminé en {minutes} min : {len(output)} labellisés, {failed} erreurs. Détail : {OUTPUT_PATH}")
-    finally:
-        engine.dispose()
-
-
-if __name__ == "__main__":
-    main()
