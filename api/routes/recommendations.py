@@ -37,7 +37,7 @@ def charger_modele():
 
 def charger_preferences(db, user_id):
     ligne = db.execute(
-        text("SELECT difficulty_id, randomness_id FROM Preferences WHERE user_id = :id"),
+        text("SELECT difficulty, randomness FROM Preferences WHERE user_id = :id"),
         {"id": user_id},
     ).fetchone()
     if ligne is None:
@@ -51,17 +51,17 @@ def charger_preferences(db, user_id):
         {"id": user_id},
     ):
         styles.append(style.style_name)
-    return {"styles": styles, "difficulte": ligne.difficulty_id, "hasard": ligne.randomness_id}
+    return {"styles": styles, "difficulte": ligne.difficulty, "hasard": ligne.randomness}
 
 
 def charger_jeux(db):
     jeux = {}
-    for ligne in db.execute(text("SELECT id, game_name, difficulty_id, randomness_id FROM Games")):
+    for ligne in db.execute(text("SELECT id, game_name, difficulty, randomness FROM Games")):
         jeux[ligne.id] = {
             "id": ligne.id,
             "nom": ligne.game_name,
-            "difficulte": ligne.difficulty_id,
-            "hasard": ligne.randomness_id,
+            "difficulte": ligne.difficulty,
+            "hasard": ligne.randomness,
             "styles": [],
         }
     for ligne in db.execute(

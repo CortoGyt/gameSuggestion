@@ -9,9 +9,9 @@ def connecter(client):
 
 def test_les_preferences_enregistrees_sont_relues(client):
     entetes = connecter(client)
-    envoyees = {"styles": ["Platformer", "Puzzle"], "difficulty": "Avancé", "randomness": "Aucun"}
+    envoyees = {"styles": ["Platformer", "Puzzle"], "difficulty": "moyen", "randomness": "bas"}
     assert client.put("/api/v1/preferences", json=envoyees, headers=entetes).status_code == 200
     relues = client.get("/api/v1/preferences", headers=entetes).json()
     assert relues["styles"] == ["Platformer", "Puzzle"]
-    assert relues["difficulty"] == "Avancé"
-    assert relues["randomness"] == "Aucun"
+    assert relues["difficulty"] == "moyen"
+    assert relues["randomness"] == "bas"

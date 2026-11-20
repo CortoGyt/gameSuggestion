@@ -25,7 +25,7 @@ def test_les_recommandations_excluent_les_jeux_deja_notes_et_donnent_le_nom(clie
 
 def test_un_nouvel_utilisateur_avec_preferences_recoit_des_jeux_classes_par_ressemblance(client):
     entetes = connecter(client)
-    preferences = {"styles": ["Platformer"], "difficulty": "Avancé", "randomness": "Aucun"}
+    preferences = {"styles": ["Platformer"], "difficulty": "moyen", "randomness": "bas"}
     client.put("/api/v1/preferences", json=preferences, headers=entetes)
     notes = [(10, 1, 5), (10, 2, 3), (11, 3, 4)]
     app.dependency_overrides[charger_modele] = lambda: SvdModel(nb_facteurs=2).fit(notes)

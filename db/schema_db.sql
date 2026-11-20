@@ -24,37 +24,16 @@ CREATE TABLE Users (
     FOREIGN KEY (role_id) REFERENCES Roles(id)
 ) ENGINE=InnoDB;
 
--- Tables de référence (échelles réutilisées)
-CREATE TABLE EchellesDE (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    label VARCHAR(20) NOT NULL UNIQUE
-) ENGINE=InnoDB;
-
-INSERT INTO EchellesDE (label) VALUES
-    ('Facile'), ('Intermédiaire'), ('Avancé'), ('Difficile'), ('Extrême');
-
-CREATE TABLE EchellesRG (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    label VARCHAR(20) NOT NULL UNIQUE
-) ENGINE=InnoDB;
-
-INSERT INTO EchellesRG (label) VALUES
-    ('Aucun'), ('Bas'), ('Moyen'), ('Haut'), ('Extrême');
-
 -- Jeux
 CREATE TABLE Games (
     id INT AUTO_INCREMENT PRIMARY KEY,
     game_name VARCHAR(150) NOT NULL UNIQUE,
     game_length INT NULL COMMENT 'Durée moyenne du jeu en minutes',
     game_dimension ENUM('2D', '2.5D', '3D') NULL,
-    difficulty_id INT NULL,
-    execution_id INT NULL,
-    randomness_id INT NULL,
-    glitchness_id INT NULL,
-    FOREIGN KEY (difficulty_id) REFERENCES EchellesDE(id),
-    FOREIGN KEY (execution_id) REFERENCES EchellesDE(id),
-    FOREIGN KEY (randomness_id) REFERENCES EchellesRG(id),
-    FOREIGN KEY (glitchness_id) REFERENCES EchellesRG(id)
+    difficulty ENUM('bas', 'moyen', 'haut') NULL,
+    execution ENUM('bas', 'moyen', 'haut') NULL,
+    randomness ENUM('bas', 'moyen', 'haut') NULL,
+    glitchness ENUM('bas', 'moyen', 'haut') NULL
 ) ENGINE=InnoDB;
 
 -- Styles (genres) des jeux, relation N-N
@@ -99,15 +78,11 @@ CREATE TABLE Preferences (
     user_id INT PRIMARY KEY,
     duration_pref ENUM('court', 'moyen', 'long') NULL,
     dimension_pref ENUM('2D', '2.5D', '3D') NULL,
-    difficulty_id INT NULL,
-    execution_id INT NULL,
-    randomness_id INT NULL,
-    glitchness_id INT NULL,
-    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE,
-    FOREIGN KEY (difficulty_id) REFERENCES EchellesDE(id),
-    FOREIGN KEY (execution_id) REFERENCES EchellesDE(id),
-    FOREIGN KEY (randomness_id) REFERENCES EchellesRG(id),
-    FOREIGN KEY (glitchness_id) REFERENCES EchellesRG(id)
+    difficulty ENUM('bas', 'moyen', 'haut') NULL,
+    execution ENUM('bas', 'moyen', 'haut') NULL,
+    randomness ENUM('bas', 'moyen', 'haut') NULL,
+    glitchness ENUM('bas', 'moyen', 'haut') NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- Styles préférés (jusqu'à 3, limite gérée en application, pas en base)
