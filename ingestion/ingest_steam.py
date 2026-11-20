@@ -26,9 +26,8 @@ from config.settings import get_settings
 
 SEARCH_URL = "https://store.steampowered.com/api/storesearch/"
 DETAILS_URL = "https://store.steampowered.com/api/appdetails"
-REVIEWS_URL = "https://store.steampowered.com/appreviews/"
-
-NB_REVIEWS = 10
+REVIEWS_URL = "https://api.steampowered.com/IUserReviewsService/GetAppReviews/v1/"
+NB_REVIEWS = 20
 MAX_REVIEW_CHARS = 600
 PAUSE_SECONDS = 1.5  # Steam limite les appels répétés
 
@@ -146,13 +145,11 @@ def fetch_blurb(appid):
 
 
 def fetch_reviews_text(appid):
-    data = get_json(
-        REVIEWS_URL + str(appid),
-        {"json": 1, "language": "english", "filter": "all", "num_per_page": 30, "purchase_type": "all"},
-    )
+    entree = {"appid": appid, "num_per_page": 30, "languages": ["english"], "day_range": 365}
+    data = get_json(REVIEWS_URL, {"input_json": json.dumps(entree)})
     if not data:
         return ""
-    return build_reviews_text(data.get("reviews", []))
+    return build_reviews_text(data.get("response", {}).get("reviews", []))
 
 
 # ---------- Base de données ----------
