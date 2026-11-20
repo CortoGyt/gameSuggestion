@@ -1,617 +1,613 @@
 {
   "_comment": "Remplis difficulty, execution, randomness et glitchness avec mon avis de speedrunner. Les jeux laissés vides sont ignorés. Les clés qui commencent par _ sont ignorées.",
   "_difficulty_et_execution": [
-    "facile",
-    "intermediaire",
-    "avance",
-    "difficile",
-    "extreme"
-  ],
-  "_randomness_et_glitchness": [
-    "aucun",
     "bas",
     "moyen",
-    "haut",
-    "extreme"
+    "haut"
+  ],
+  "_randomness_et_glitchness": [
+    "bas",
+    "moyen",
+    "haut"
   ],
   "Celeste": {
-    "difficulty": "difficile",
-    "execution": "avance",
-    "randomness": "aucun",
+    "difficulty": "haut",
+    "execution": "moyen",
+    "randomness": "bas",
     "glitchness": "bas"
   },
   "Super Mario 64": {
-    "difficulty": "avance",
-    "execution": "difficile",
+    "difficulty": "moyen",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "Hollow Knight": {
-    "difficulty": "avance",
-    "execution": "avance",
+    "difficulty": "moyen",
+    "execution": "moyen",
     "randomness": "bas",
     "glitchness": "moyen"
   },
   "Counter-Strike": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "moyen",
     "glitchness": "bas"
   },
   "Factorio": {
-    "difficulty": "difficile",
-    "execution": "avance",
+    "difficulty": "haut",
+    "execution": "moyen",
     "randomness": "moyen",
     "glitchness": "bas"
   },
   "Tetris": {
-    "difficulty": "avance",
-    "execution": "extreme",
+    "difficulty": "moyen",
+    "execution": "haut",
     "randomness": "haut",
-    "glitchness": "aucun"
+    "glitchness": "bas"
   },
   "Spelunky": {
-    "difficulty": "difficile",
-    "execution": "avance",
-    "randomness": "extreme",
+    "difficulty": "haut",
+    "execution": "moyen",
+    "randomness": "haut",
     "glitchness": "moyen"
   },
   "Dark Souls": {
-    "difficulty": "avance",
-    "execution": "avance",
+    "difficulty": "moyen",
+    "execution": "moyen",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "Getting Over It with Bennett Foddy": {
-    "difficulty": "difficile",
-    "execution": "extreme",
-    "randomness": "aucun",
+    "difficulty": "haut",
+    "execution": "haut",
+    "randomness": "bas",
     "glitchness": "moyen"
   },
   "Pokémon Red": {
-    "difficulty": "avance",
-    "execution": "difficile",
+    "difficulty": "moyen",
+    "execution": "haut",
     "randomness": "haut",
-    "glitchness": "extreme"
+    "glitchness": "haut"
   },
   "Super Mario Bros.": {
-    "difficulty": "difficile",
-    "execution": "extreme",
+    "difficulty": "haut",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "moyen"
   },
   "Super Metroid": {
-    "difficulty": "difficile",
-    "execution": "difficile",
+    "difficulty": "haut",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "moyen"
   },
   "The Legend of Zelda: Ocarina of Time": {
-    "difficulty": "difficile",
-    "execution": "difficile",
+    "difficulty": "haut",
+    "execution": "haut",
     "randomness": "bas",
-    "glitchness": "extreme"
+    "glitchness": "haut"
   },
   "Hades": {
-    "difficulty": "avance",
-    "execution": "avance",
+    "difficulty": "moyen",
+    "execution": "moyen",
     "randomness": "haut",
     "glitchness": "bas"
   },
   "Minecraft": {
-    "difficulty": "avance",
-    "execution": "avance",
-    "randomness": "extreme",
+    "difficulty": "moyen",
+    "execution": "moyen",
+    "randomness": "haut",
     "glitchness": "bas"
   },
   "Portal": {
-    "difficulty": "difficile",
-    "execution": "extreme",
-    "randomness": "aucun",
-    "glitchness": "extreme"
+    "difficulty": "haut",
+    "execution": "haut",
+    "randomness": "bas",
+    "glitchness": "haut"
   },
   "Doom": {
-    "difficulty": "avance",
-    "execution": "difficile",
+    "difficulty": "moyen",
+    "execution": "haut",
     "randomness": "moyen",
     "glitchness": "moyen"
   },
   "Stardew Valley": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "moyen",
     "glitchness": "bas"
   },
   "Mega Man 2": {
-    "difficulty": "intermediaire",
-    "execution": "avance",
+    "difficulty": "bas",
+    "execution": "moyen",
     "randomness": "bas",
     "glitchness": "moyen"
   },
   "Elden Ring": {
-    "difficulty": "avance",
-    "execution": "avance",
+    "difficulty": "moyen",
+    "execution": "moyen",
     "randomness": "bas",
-    "glitchness": "extreme"
+    "glitchness": "haut"
   },
   "Super Mario Bros. 2": {
-    "difficulty": "avance",
-    "execution": "avance",
+    "difficulty": "moyen",
+    "execution": "moyen",
     "randomness": "moyen",
     "glitchness": "moyen"
   },
   "Super Mario Bros. 3": {
-    "difficulty": "difficile",
-    "execution": "extreme",
+    "difficulty": "haut",
+    "execution": "haut",
     "randomness": "moyen",
     "glitchness": "haut"
   },
   "Super Mario World": {
-    "difficulty": "avance",
-    "execution": "extreme",
+    "difficulty": "moyen",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "Super Mario Sunshine": {
-    "difficulty": "difficile",
-    "execution": "extreme",
+    "difficulty": "haut",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "Super Mario Galaxy": {
-    "difficulty": "avance",
-    "execution": "difficile",
+    "difficulty": "moyen",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "moyen"
   },
   "Super Mario Odyssey": {
-    "difficulty": "difficile",
-    "execution": "difficile",
+    "difficulty": "haut",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "Donkey Kong Country": {
-    "difficulty": "avance",
-    "execution": "difficile",
+    "difficulty": "moyen",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "moyen"
   },
   "Donkey Kong 64": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "Sonic the Hedgehog": {
-    "difficulty": "avance",
-    "execution": "difficile",
+    "difficulty": "moyen",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "moyen"
   },
   "Sonic the Hedgehog 2": {
-    "difficulty": "difficile",
-    "execution": "difficile",
+    "difficulty": "haut",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "moyen"
   },
   "Mega Man X": {
-    "difficulty": "intermediaire",
-    "execution": "difficile",
+    "difficulty": "bas",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "moyen"
   },
   "Castlevania: Symphony of the Night": {
-    "difficulty": "avance",
-    "execution": "avance",
+    "difficulty": "moyen",
+    "execution": "moyen",
     "randomness": "moyen",
     "glitchness": "haut"
   },
   "Metroid Prime": {
-    "difficulty": "avance",
-    "execution": "intermediaire",
+    "difficulty": "moyen",
+    "execution": "bas",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "Super Meat Boy": {
-    "difficulty": "difficile",
-    "execution": "extreme",
-    "randomness": "aucun",
+    "difficulty": "haut",
+    "execution": "haut",
+    "randomness": "bas",
     "glitchness": "bas"
   },
   "Ori and the Blind Forest": {
-    "difficulty": "intermediaire",
-    "execution": "avance",
-    "randomness": "aucun",
+    "difficulty": "bas",
+    "execution": "moyen",
+    "randomness": "bas",
     "glitchness": "moyen"
   },
   "Cuphead": {
-    "difficulty": "difficile",
-    "execution": "difficile",
+    "difficulty": "haut",
+    "execution": "haut",
     "randomness": "moyen",
     "glitchness": "bas"
   },
   "Shovel Knight": {
-    "difficulty": "intermediaire",
-    "execution": "avance",
-    "randomness": "aucun",
+    "difficulty": "bas",
+    "execution": "moyen",
+    "randomness": "bas",
     "glitchness": "bas"
   },
   "Ghosts 'n Goblins": {
-    "difficulty": "difficile",
-    "execution": "difficile",
+    "difficulty": "haut",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "bas"
   },
   "Contra": {
-    "difficulty": "avance",
-    "execution": "difficile",
+    "difficulty": "moyen",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "bas"
   },
   "Battletoads": {
-    "difficulty": "difficile",
-    "execution": "extreme",
+    "difficulty": "haut",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "bas"
   },
   "Crash Bandicoot": {
-    "difficulty": "difficile",
-    "execution": "difficile",
+    "difficulty": "haut",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "Spyro the Dragon": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "Banjo-Kazooie": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "A Hat in Time": {
-    "difficulty": "difficile",
-    "execution": "difficile",
-    "randomness": "aucun",
+    "difficulty": "haut",
+    "execution": "haut",
+    "randomness": "bas",
     "glitchness": "haut"
   },
   "Jump King": {
-    "difficulty": "difficile",
-    "execution": "extreme",
-    "randomness": "aucun",
+    "difficulty": "haut",
+    "execution": "haut",
+    "randomness": "bas",
     "glitchness": "bas"
   },
   "N++": {
-    "difficulty": "extreme",
-    "execution": "extreme",
-    "randomness": "aucun",
-    "glitchness": "aucun"
+    "difficulty": "haut",
+    "execution": "haut",
+    "randomness": "bas",
+    "glitchness": "bas"
   },
   "Dustforce": {
-    "difficulty": "extreme",
-    "execution": "extreme",
-    "randomness": "aucun",
+    "difficulty": "haut",
+    "execution": "haut",
+    "randomness": "bas",
     "glitchness": "moyen"
   },
   "Spelunky 2": {
-    "difficulty": "difficile",
-    "execution": "avance",
-    "randomness": "extreme",
+    "difficulty": "haut",
+    "execution": "moyen",
+    "randomness": "haut",
     "glitchness": "moyen"
   },
   "VVVVVV": {
-    "difficulty": "avance",
-    "execution": "avance",
-    "randomness": "aucun",
+    "difficulty": "moyen",
+    "execution": "moyen",
+    "randomness": "bas",
     "glitchness": "bas"
   },
   "Braid": {
-    "difficulty": "avance",
-    "execution": "avance",
-    "randomness": "aucun",
+    "difficulty": "moyen",
+    "execution": "moyen",
+    "randomness": "bas",
     "glitchness": "moyen"
   },
   "Limbo": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
-    "randomness": "aucun",
+    "difficulty": "bas",
+    "execution": "bas",
+    "randomness": "bas",
     "glitchness": "bas"
   },
   "Inside": {
-    "difficulty": "intermediaire",
-    "execution": "avance",
-    "randomness": "aucun",
+    "difficulty": "bas",
+    "execution": "moyen",
+    "randomness": "bas",
     "glitchness": "moyen"
   },
   "The Legend of Zelda": {
-    "difficulty": "avance",
-    "execution": "avance",
+    "difficulty": "moyen",
+    "execution": "moyen",
     "randomness": "moyen",
     "glitchness": "moyen"
   },
   "The Legend of Zelda: A Link to the Past": {
-    "difficulty": "avance",
-    "execution": "avance",
+    "difficulty": "moyen",
+    "execution": "moyen",
     "randomness": "moyen",
-    "glitchness": "extreme"
+    "glitchness": "haut"
   },
   "The Legend of Zelda: Majora's Mask": {
-    "difficulty": "avance",
-    "execution": "avance",
+    "difficulty": "moyen",
+    "execution": "moyen",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "The Legend of Zelda: The Wind Waker": {
-    "difficulty": "avance",
-    "execution": "avance",
+    "difficulty": "moyen",
+    "execution": "moyen",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "The Legend of Zelda: Breath of the Wild": {
-    "difficulty": "avance",
-    "execution": "difficile",
+    "difficulty": "moyen",
+    "execution": "haut",
     "randomness": "moyen",
     "glitchness": "haut"
   },
   "Dark Souls III": {
-    "difficulty": "avance",
-    "execution": "avance",
+    "difficulty": "moyen",
+    "execution": "moyen",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "Demon's Souls": {
-    "difficulty": "avance",
-    "execution": "avance",
+    "difficulty": "moyen",
+    "execution": "moyen",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "Bloodborne": {
-    "difficulty": "difficile",
-    "execution": "avance",
+    "difficulty": "haut",
+    "execution": "moyen",
     "randomness": "moyen",
     "glitchness": "haut"
   },
   "Sekiro: Shadows Die Twice": {
-    "difficulty": "difficile",
-    "execution": "difficile",
+    "difficulty": "haut",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "moyen"
   },
   "Final Fantasy VI": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "moyen",
     "glitchness": "haut"
   },
   "Final Fantasy VII": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "haut",
     "glitchness": "moyen"
   },
   "Final Fantasy X": {
-    "difficulty": "facile",
-    "execution": "intermediaire",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "haut",
     "glitchness": "moyen"
   },
   "Chrono Trigger": {
-    "difficulty": "intermediaire",
-    "execution": "avance",
+    "difficulty": "bas",
+    "execution": "moyen",
     "randomness": "moyen",
     "glitchness": "haut"
   },
   "Pokémon Yellow": {
-    "difficulty": "avance",
-    "execution": "avance",
+    "difficulty": "moyen",
+    "execution": "moyen",
     "randomness": "haut",
     "glitchness": "haut"
   },
   "Pokémon Crystal": {
-    "difficulty": "avance",
-    "execution": "avance",
+    "difficulty": "moyen",
+    "execution": "moyen",
     "randomness": "haut",
     "glitchness": "haut"
   },
   "Pokémon Emerald": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "haut",
     "glitchness": "moyen"
   },
   "EarthBound": {
-    "difficulty": "avance",
-    "execution": "avance",
+    "difficulty": "moyen",
+    "execution": "moyen",
     "randomness": "moyen",
-    "glitchness": "extreme"
+    "glitchness": "haut"
   },
   "Undertale": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "moyen",
     "glitchness": "bas"
   },
   "Persona 5": {
-    "difficulty": "facile",
-    "execution": "facile",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "moyen",
     "glitchness": "bas"
   },
   "The Witcher 3: Wild Hunt": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "bas",
     "glitchness": "moyen"
   },
   "The Elder Scrolls V: Skyrim": {
-    "difficulty": "intermediaire",
-    "execution": "avance",
+    "difficulty": "bas",
+    "execution": "moyen",
     "randomness": "moyen",
     "glitchness": "haut"
   },
   "Fallout 3": {
-    "difficulty": "facile",
-    "execution": "avance",
+    "difficulty": "bas",
+    "execution": "moyen",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "Diablo II": {
-    "difficulty": "avance",
-    "execution": "intermediaire",
+    "difficulty": "moyen",
+    "execution": "bas",
     "randomness": "haut",
     "glitchness": "moyen"
   },
   "Baldur's Gate 3": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "moyen",
     "glitchness": "haut"
   },
   "Disco Elysium": {
-    "difficulty": "facile",
-    "execution": "facile",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "moyen",
     "glitchness": "bas"
   },
   "Half-Life": {
-    "difficulty": "avance",
-    "execution": "intermediaire",
+    "difficulty": "moyen",
+    "execution": "bas",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "Half-Life 2": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "Portal 2": {
-    "difficulty": "avance",
-    "execution": "difficile",
-    "randomness": "aucun",
+    "difficulty": "moyen",
+    "execution": "haut",
+    "randomness": "bas",
     "glitchness": "haut"
   },
   "Quake": {
-    "difficulty": "extreme",
-    "execution": "extreme",
+    "difficulty": "haut",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "moyen"
   },
   "Halo 3": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "GoldenEye 007": {
-    "difficulty": "difficile",
-    "execution": "avance",
+    "difficulty": "haut",
+    "execution": "moyen",
     "randomness": "moyen",
     "glitchness": "haut"
   },
   "Hotline Miami": {
-    "difficulty": "difficile",
-    "execution": "difficile",
+    "difficulty": "haut",
+    "execution": "haut",
     "randomness": "bas",
     "glitchness": "bas"
   },
   "Terraria": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "haut",
     "glitchness": "bas"
   },
   "Slay the Spire": {
-    "difficulty": "avance",
-    "execution": "intermediaire",
-    "randomness": "extreme",
+    "difficulty": "moyen",
+    "execution": "bas",
+    "randomness": "haut",
     "glitchness": "bas"
   },
   "Dr. Mario": {
-    "difficulty": "avance",
-    "execution": "avance",
+    "difficulty": "moyen",
+    "execution": "moyen",
     "randomness": "haut",
-    "glitchness": "aucun"
+    "glitchness": "bas"
   },
   "Mario Kart 64": {
-    "difficulty": "avance",
-    "execution": "extreme",
+    "difficulty": "moyen",
+    "execution": "haut",
     "randomness": "moyen",
     "glitchness": "haut"
   },
   "Resident Evil": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "moyen",
     "glitchness": "haut"
   },
   "Resident Evil 4": {
-    "difficulty": "avance",
-    "execution": "intermediaire",
+    "difficulty": "moyen",
+    "execution": "bas",
     "randomness": "moyen",
     "glitchness": "haut"
   },
   "Metal Gear Solid": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
+    "difficulty": "bas",
+    "execution": "bas",
     "randomness": "bas",
     "glitchness": "haut"
   },
   "Untitled Goose Game": {
-    "difficulty": "facile",
-    "execution": "facile",
-    "randomness": "aucun",
+    "difficulty": "bas",
+    "execution": "bas",
+    "randomness": "bas",
     "glitchness": "bas"
   },
   "Firewatch": {
-    "difficulty": "facile",
-    "execution": "facile",
-    "randomness": "aucun",
+    "difficulty": "bas",
+    "execution": "bas",
+    "randomness": "bas",
     "glitchness": "moyen"
   },
   "The Stanley Parable": {
-    "difficulty": "facile",
-    "execution": "facile",
-    "randomness": "aucun",
+    "difficulty": "bas",
+    "execution": "bas",
+    "randomness": "bas",
     "glitchness": "moyen"
   },
   "Myst": {
-    "difficulty": "facile",
-    "execution": "facile",
-    "randomness": "aucun",
+    "difficulty": "bas",
+    "execution": "bas",
+    "randomness": "bas",
     "glitchness": "haut"
   },
   "Outer Wilds": {
-    "difficulty": "intermediaire",
-    "execution": "intermediaire",
-    "randomness": "aucun",
+    "difficulty": "bas",
+    "execution": "bas",
+    "randomness": "bas",
     "glitchness": "haut"
   },
   "The Binding of Isaac: Rebirth": {
-    "difficulty": "avance",
-    "execution": "avance",
-    "randomness": "extreme",
+    "difficulty": "moyen",
+    "execution": "moyen",
+    "randomness": "haut",
     "glitchness": "moyen"
   },
   "Risk of Rain 2": {
-    "difficulty": "avance",
-    "execution": "avance",
-    "randomness": "extreme",
+    "difficulty": "moyen",
+    "execution": "moyen",
+    "randomness": "haut",
     "glitchness": "haut"
   },
   "Ikaruga": {
-    "difficulty": "difficile",
-    "execution": "difficile",
-    "randomness": "aucun",
+    "difficulty": "haut",
+    "execution": "haut",
+    "randomness": "bas",
     "glitchness": "bas"
   },
   "FTL: Faster Than Light": {
-    "difficulty": "avance",
-    "execution": "intermediaire",
-    "randomness": "extreme",
+    "difficulty": "moyen",
+    "execution": "bas",
+    "randomness": "haut",
     "glitchness": "bas"
   }
 }

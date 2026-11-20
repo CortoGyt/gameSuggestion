@@ -7,16 +7,10 @@ from api.schemas import GameListOut, GameOut
 
 router = APIRouter()
 
-# Les libellés des échelles viennent des tables EchellesDE / EchellesRG
 SELECT_GAMES = """
     SELECT g.id, g.game_name, g.game_length, g.game_dimension,
-           d.label AS difficulty, e.label AS execution,
-           r.label AS randomness, gl.label AS glitchness
+           g.difficulty, g.execution, g.randomness, g.glitchness
     FROM Games g
-    LEFT JOIN EchellesDE d ON d.id = g.difficulty_id
-    LEFT JOIN EchellesDE e ON e.id = g.execution_id
-    LEFT JOIN EchellesRG r ON r.id = g.randomness_id
-    LEFT JOIN EchellesRG gl ON gl.id = g.glitchness_id
 """
 
 

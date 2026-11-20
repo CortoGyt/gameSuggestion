@@ -4,12 +4,15 @@ On compare ses préférences (styles aimés, difficulté, part de hasard) aux la
 Score de 0 à 1 : 50 % le style, 30 % la difficulté, 20 % le hasard.
 """
 
+# Dans la base les niveaux sont des mots ; ici on les transforme en rang pour mesurer un écart
+RANG = {"bas": 0, "moyen": 1, "haut": 2}
+
 
 def proximite(valeur_jeu, valeur_preferee):
-    # 1 si le jeu est exactement au niveau préféré, 0 si l'écart est maximal (4 niveaux)
+    # 1 si le jeu est exactement au niveau préféré, 0 si l'écart est maximal (2 crans : bas contre haut)
     if valeur_jeu is None or valeur_preferee is None:
         return 0.5  # information absente : ni pour ni contre
-    return 1 - abs(valeur_jeu - valeur_preferee) / 4
+    return 1 - abs(RANG[valeur_jeu] - RANG[valeur_preferee]) / 2
 
 
 def score_jeu(preferences, jeu):

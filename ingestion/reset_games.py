@@ -2,7 +2,7 @@
 
 DELETES: Games, Styles, Style_Games, Textes, Users_Games, Preferences_Styles
          (the last four go by cascade from Games / Styles); AUTO_INCREMENT counters restart at 1
-KEEPS:   Users, Roles, Preferences, EchellesDE, EchellesRG
+KEEPS:   Users, Roles, Preferences
 
 Usage (from the project root):
     python -m ingestion.reset_games                          # shows what will happen, asks to confirm
@@ -54,7 +54,7 @@ def main() -> None:
         print("Sera supprimé :")
         for table, n in count_rows(engine).items():
             print(f"  {table:18} {n} lignes")
-        print("Sera conservé : Users, Roles, Preferences, EchellesDE, EchellesRG")
+        print("Sera conservé : Users, Roles, Preferences")
         print(f"Sera rechargé : {len(names)} jeux depuis {args.seed}")
 
         if not args.yes:

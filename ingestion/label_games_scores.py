@@ -1,20 +1,20 @@
-"""Label the games from SCORES (1-10) instead of words, then turn the scores into levels by RANK.
+"""Étiquette les jeux à partir de SCORES (1 à 10) au lieu de mots, puis transforme les scores en niveaux PAR RANG.
 
-Why: with words, the local model answers "avance / moyen / bas" for most games (see the distribution
-printed at the end of label_games_local). Here the model gives a score 1-10 for each key; the games
-are then sorted and cut into the 5 levels with fixed shares (PROPORTIONS), so the 5 levels are always used.
-The levels become RELATIVE to the catalogue: "extreme" = among the highest of the 200 games.
+Pourquoi : avec des mots, le modèle local répond presque toujours le mot du milieu. Ici le modèle donne
+un score de 1 à 10 pour chaque critère ; les jeux sont ensuite triés puis découpés en 3 niveaux
+(bas / moyen / haut) avec des parts fixes (PROPORTIONS), donc les 3 niveaux sont toujours utilisés.
+Les niveaux sont RELATIFS au catalogue : « haut » = parmi les 30 % de jeux les plus hauts.
 
-Nothing is written to the database unless you pass --write.
+Rien n'est écrit en base sans l'option --write.
 
-Usage (from the project root, Ollama running):
-    python -m ingestion.label_games_scores --limit 10                 # test: 10 games, nothing written
-    python -m ingestion.label_games_scores                            # score all games, show the result + score on your reference
-    python -m ingestion.label_games_scores --from-file                # reuse data/scores_raw.json (no model call)
-    python -m ingestion.label_games_scores --from-file --write        # write the levels into MySQL
-    python -m ingestion.label_games_scores --no-mlflow                # do not record the run in MLflow
+Utilisation (depuis la racine du projet, Ollama lancé) :
+    python -m ingestion.label_games_scores --limit 10            # test : 10 jeux, rien n'est écrit
+    python -m ingestion.label_games_scores                       # note tous les jeux, affiche le résultat et la mesure sur ta référence
+    python -m ingestion.label_games_scores --from-file           # réutilise data/scores_raw.json (aucun appel au modèle)
+    python -m ingestion.label_games_scores --from-file --write   # écrit les niveaux dans MySQL
+    python -m ingestion.label_games_scores --no-mlflow           # n'enregistre pas le run dans MLflow
 
-The raw scores are saved in data/scores_raw.json so the cut into levels can be redone without calling the model.
+Les scores bruts sont sauvegardés dans data/scores_raw.json : on peut refaire le découpage sans rappeler le modèle.
 """
 import argparse
 import json
@@ -23,7 +23,7 @@ import time
 
 import requests
 from config.settings import get_settings
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 
 from ingestion.evaluate_labelling import (
     KEYS,
@@ -37,20 +37,17 @@ from ingestion.ingest_igdb import normalize
 from ingestion.label_games_local import (
     DEFAULT_CATEGORY,
     OLLAMA_URL,
-    SCALE_A,
-    SCALE_B,
     build_prompt,
     check_ollama,
     get_pending_games,
-    get_scale_ids,
     load_categories,
     save_labels,
 )
 
-DEFAULT_MODEL = "gemma3:12b"
+DEFAULT_MODEL = "mistral-small:24b"
 SCORES_PATH = "data/scores_raw.json"
-# share of the games given to each of the 5 levels, from the lowest to the highest (sum = 1)
-PROPORTIONS = [0.10, 0.25, 0.30, 0.25, 0.10]
+# part des jeux donnée à chacun des 3 niveaux, du plus bas au plus haut (somme = 1)
+PROPORTIONS = [0.30, 0.40, 0.30]
 SCORE_VALUES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 SCORE_SCHEMA = {
@@ -65,9 +62,9 @@ SCORE_SCHEMA = {
 }
 
 
-def build_score_prompt(name: str, categories: list, genres, dimension, length_minutes) -> str:
-    """The label prompt (same definitions), with the answer format changed to scores 1-10."""
-    base = build_prompt(name, categories, genres, dimension, length_minutes, False)
+def build_score_prompt(name: str, categories: list, genres, dimension, length_minutes, description=None) -> str:
+    """Le prompt d'étiquetage (mêmes définitions), avec le format de réponse changé en scores de 1 à 10."""
+    base = build_prompt(name, categories, genres, dimension, length_minutes, False, description)
     definitions = base[: base.index("SCALE A (use ONLY")]
     categories_text = ", ".join(categories)
     return (
@@ -79,6 +76,21 @@ def build_score_prompt(name: str, categories: list, genres, dimension, length_mi
         + "Compare this game with all the other speedrun games you know.\n\n"
         + f"Analysis for: {name}\nCategories: {categories_text}"
     )
+
+
+def get_description(engine, game_id: int) -> str:
+    with engine.connect() as conn:
+        row = conn.execute(
+            text(
+                "SELECT content FROM Textes WHERE game_id = :id "
+                "AND source IN ('steam_blurb', 'igdb_summary') "
+                "ORDER BY FIELD(source, 'steam_blurb', 'igdb_summary') LIMIT 1"
+            ),
+            {"id": game_id},
+        ).fetchone()
+    if row is None:
+        return ""
+    return row[0][:300].replace("\n", " ")
 
 
 def ask_scores(model: str, prompt: str) -> dict:
@@ -108,7 +120,7 @@ def validate_scores(answer: dict) -> dict | None:
 
 
 def scores_to_levels(values: list) -> list:
-    """Level index (0-4) of each value, by rank. Equal scores always get the same level."""
+    """Numéro de niveau (0 à 2) de chaque valeur, par rang. Deux scores égaux ont toujours le même niveau."""
     total = len(values)
     ordered = sorted(values)
     first = {}
@@ -134,7 +146,7 @@ def scores_to_levels(values: list) -> list:
 
 
 def convert_all(scores: dict) -> dict:
-    """{game name: {key: score}} -> {game name: {key: level word}}"""
+    """{nom du jeu: {critère: score}} -> {nom du jeu: {critère: mot du niveau}}"""
     names = list(scores.keys())
     labels = {}
     for name in names:
@@ -164,17 +176,17 @@ def print_distribution(labels: dict) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model", default=DEFAULT_MODEL, help=f"Ollama model (default {DEFAULT_MODEL})")
-    parser.add_argument("--limit", type=int, default=None, help="max games to score (test)")
-    parser.add_argument("--from-file", action="store_true", help=f"reuse {SCORES_PATH}, no model call")
-    parser.add_argument("--write", action="store_true", help="write the levels into the database")
-    parser.add_argument("--reference", default=REFERENCE_PATH, help="your expected labels, to measure the result")
-    parser.add_argument("--no-mlflow", action="store_true", help="do not record the run in MLflow")
+    parser.add_argument("--model", default=DEFAULT_MODEL, help=f"modèle Ollama (par défaut {DEFAULT_MODEL})")
+    parser.add_argument("--limit", type=int, default=None, help="nombre maximum de jeux à noter (test)")
+    parser.add_argument("--from-file", action="store_true", help=f"réutilise {SCORES_PATH}, sans appeler le modèle")
+    parser.add_argument("--write", action="store_true", help="écrit les niveaux dans la base de données")
+    parser.add_argument("--reference", default=REFERENCE_PATH, help="tes labels attendus, pour mesurer le résultat")
+    parser.add_argument("--no-mlflow", action="store_true", help="n'enregistre pas le run dans MLflow")
     args = parser.parse_args()
 
     engine = create_engine(get_settings().DATABASE_URL)
     try:
-        games = {}  # name -> (id, seconds)
+        games = {}  # nom -> (id, secondes)
         scores = {}
         seconds_total = 0.0
 
@@ -198,7 +210,8 @@ def main() -> None:
                     game_id, name, dimension, length, genres = row
                     name = name.strip()
                     game_categories = categories.get(normalize(name), [DEFAULT_CATEGORY])
-                    prompt = build_score_prompt(name, game_categories, genres, dimension, length)
+                    description = get_description(engine, game_id)
+                    prompt = build_score_prompt(name, game_categories, genres, dimension, length, description)
                     started = time.time()
                     try:
                         result = validate_scores(ask_scores(args.model, prompt))
@@ -228,7 +241,7 @@ def main() -> None:
         print("\nRépartition des niveaux obtenus :")
         print_distribution(labels)
 
-        # score on the reference games (same metrics as evaluate_labelling)
+        # mesure sur les jeux de référence (mêmes mesures que evaluate_labelling)
         rows = []
         if os.path.exists(args.reference):
             reference, skipped = load_reference(args.reference)
@@ -262,18 +275,8 @@ def main() -> None:
                 log_to_mlflow(args, "scores-" + str(len(PROPORTIONS)), metrics, rows, len(rows))
 
         if args.write:
-            ids_de = get_scale_ids(engine, "EchellesDE")
-            ids_rg = get_scale_ids(engine, "EchellesRG")
-            for word in SCALE_A:
-                if word not in ids_de:
-                    print(f"Valeur absente de EchellesDE : {word}")
-                    return
-            for word in SCALE_B:
-                if word not in ids_rg:
-                    print(f"Valeur absente de EchellesRG : {word}")
-                    return
             for name in labels:
-                save_labels(engine, games[name][0], labels[name], ids_de, ids_rg)
+                save_labels(engine, games[name][0], labels[name])
             print(f"\n{len(labels)} jeux écrits en base.")
         else:
             print("\nRien écrit en base (ajoute --write pour enregistrer ces niveaux).")

@@ -24,31 +24,35 @@ BRUIT_MAX = 0.7  # le bruit décale la note de -0,7 à +0,7 point (avant arrondi
 MOT_DE_PASSE_INVALIDE = "!synthetic"
 
 # styles : genres IGDB aimés (liste vide = pas de préférence de genre)
-# difficulte, hasard : niveau préféré de 1 (le plus bas) à 5 (le plus haut)
+# difficulte, hasard : niveau préféré, "bas", "moyen" ou "haut"
 ARCHETYPES = [
-    {"nom": "platformer_precis", "styles": ["Platform", "Indie"], "difficulte": 4, "hasard": 1},
-    {"nom": "fan_de_rpg", "styles": ["Role-playing (RPG)", "Adventure"], "difficulte": 3, "hasard": 3},
-    {"nom": "fan_de_tir", "styles": ["Shooter"], "difficulte": 3, "hasard": 2},
+    {"nom": "platformer_precis", "styles": ["Platform", "Indie"], "difficulte": "haut", "hasard": "bas"},
+    {"nom": "fan_de_rpg", "styles": ["Role-playing (RPG)", "Adventure"], "difficulte": "moyen", "hasard": "moyen"},
+    {"nom": "fan_de_tir", "styles": ["Shooter"], "difficulte": "moyen", "hasard": "bas"},
     {
         "nom": "stratege",
         "styles": ["Strategy", "Real Time Strategy (RTS)", "Turn-based strategy (TBS)"],
-        "difficulte": 3,
-        "hasard": 3,
+        "difficulte": "moyen",
+        "hasard": "moyen",
     },
-    {"nom": "amateur_de_puzzle", "styles": ["Puzzle", "Point-and-click", "Adventure"], "difficulte": 2, "hasard": 1},
-    {"nom": "retro_arcade", "styles": ["Arcade", "Platform", "Fighting"], "difficulte": 3, "hasard": 2},
-    {"nom": "fan_de_hasard", "styles": ["Indie", "Hack and slash/Beat 'em up"], "difficulte": 4, "hasard": 5},
-    {"nom": "explorateur_tranquille", "styles": ["Adventure", "Simulator", "Puzzle"], "difficulte": 1, "hasard": 2},
-    {"nom": "challenger_hardcore", "styles": [], "difficulte": 5, "hasard": 3},
-    {"nom": "course_et_sport", "styles": ["Racing", "Sport", "Arcade"], "difficulte": 2, "hasard": 3},
+    {"nom": "amateur_de_puzzle", "styles": ["Puzzle", "Point-and-click", "Adventure"], "difficulte": "bas", "hasard": "bas"},
+    {"nom": "retro_arcade", "styles": ["Arcade", "Platform", "Fighting"], "difficulte": "moyen", "hasard": "bas"},
+    {"nom": "fan_de_hasard", "styles": ["Indie", "Hack and slash/Beat 'em up"], "difficulte": "haut", "hasard": "haut"},
+    {"nom": "explorateur_tranquille", "styles": ["Adventure", "Simulator", "Puzzle"], "difficulte": "bas", "hasard": "bas"},
+    {"nom": "challenger_hardcore", "styles": [], "difficulte": "haut", "hasard": "moyen"},
+    {"nom": "course_et_sport", "styles": ["Racing", "Sport", "Arcade"], "difficulte": "bas", "hasard": "moyen"},
 ]
 
 
+# Rang de chaque niveau, pour pouvoir mesurer l'écart entre deux niveaux
+RANG = {"bas": 0, "moyen": 1, "haut": 2}
+
+
 def proximite(valeur_jeu, valeur_preferee):
-    # 1 si le jeu est exactement au niveau préféré, 0 si l'écart est maximal (4 niveaux)
+    # 1 si le jeu est exactement au niveau préféré, 0 si l'écart est maximal (2 crans)
     if valeur_jeu is None:
         return 0.5  # label absent : ni pour ni contre
-    return 1 - abs(valeur_jeu - valeur_preferee) / 4
+    return 1 - abs(RANG[valeur_jeu] - RANG[valeur_preferee]) / 2
 
 
 def affinite(utilisateur, jeu):
@@ -77,11 +81,11 @@ def note_depuis_affinite(valeur_affinite, bruit):
 
 def charger_jeux(conn):
     lignes = conn.execute(
-        text("SELECT id, difficulty_id, randomness_id FROM Games ORDER BY id")
+        text("SELECT id, difficulty, randomness FROM Games ORDER BY id")
     ).fetchall()
     jeux = {}
     for ligne in lignes:
-        jeux[ligne.id] = {"id": ligne.id, "difficulte": ligne.difficulty_id, "hasard": ligne.randomness_id, "styles": []}
+        jeux[ligne.id] = {"id": ligne.id, "difficulte": ligne.difficulty, "hasard": ligne.randomness, "styles": []}
     styles = conn.execute(
         text("SELECT sg.game_id, s.style_name FROM Style_Games sg JOIN Styles s ON s.id = sg.style_id")
     ).fetchall()
